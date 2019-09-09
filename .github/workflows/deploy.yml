@@ -1,0 +1,36 @@
+name: Test and Deployment
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.6.3
+    - name: Install prerequisites
+      run: |
+        sudo apt-get install -y build-essential libpq-dev
+    - name: Install gems
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+    - name: Run RSpec
+      run: |
+        bundle exec rspec
+    - name: Deploy to Production
+      if: success() && github.ref == 'refs/heads/master'
+      run: |
+        mkdir ~/.ssh
+        chmod 700 ~/.ssh
+        echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        bundle exec cap production deploy
+      env:
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        CAP_DEPLOY_SERVER: ${{ secrets.CAP_DEPLOY_SERVER }}
+        CAP_DEPLOY_PORT: ${{ secrets.CAP_DEPLOY_PORT }}
+        CAP_DEPLOY_USER: ${{ secrets.CAP_DEPLOY_USER }}
