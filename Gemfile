@@ -21,6 +21,12 @@ gem 'puma', '~> 3.11'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'listen', '>= 3.0.5', '< 3.2'
 
+# Use Whenever to schedule tasks such as API scraping
+gem 'whenever', require: false
+
+# Guild Wars 2 API Handler
+gem 'gw2api', github: 'Eearslya/gw2api-rb'
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
