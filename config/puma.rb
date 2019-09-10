@@ -3,11 +3,10 @@
 
 threads 4, 32
 
-basedir = '/home/eternalalchemy/EternalAlchemy/current'
+basedir = File.expand_path("#{__dir__}/..")
 
 directory "#{basedir}"
 environment 'production'
-daemonize true
 pidfile "#{basedir}/tmp/sockets/puma.pid"
 bind "unix://#{basedir}/tmp/sockets/puma.sock"
 state_path "#{basedir}/tmp/sockets/puma.state"

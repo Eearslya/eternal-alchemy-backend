@@ -3,18 +3,23 @@ default: &default
   encoding: unicode
   host: localhost
   port: 5432
-  username: eternalalchemy
-  password: <%= Rails.application.credentials.postgres[:password] || 'eternalalchemy' %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
   database: eternalalchemy_development
+  username: eternalalchemy
+  password: eternalalchemy
 
 test:
   <<: *default
+  host: db
+  username: postgres
+  password: postgres
   database: eternalalchemy_test
 
 production:
   <<: *default
   database: eternalalchemy
+  username: <%= Rails.application.credentials.dig(:postgres, :username) || 'eternalalchemy' %>
+  password: <%= Rails.application.credentials.dig(:postgres, :password) || 'eternalalchemy' %>
